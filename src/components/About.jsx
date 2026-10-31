@@ -1,9 +1,10 @@
 import { aboutContent, personalInfo, education } from '../data/portfolioData'
+import profileImg from '../assets/about/profile.png'
 
 function About() {
   return (
     <section id="about" className="py-24 bg-[#0a0a0a] text-white px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-semibold uppercase tracking-widest text-[#ff2a2a]">
             Discover
@@ -13,8 +14,24 @@ function About() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="md:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Profile Photo */}
+          <div className="lg:col-span-4 flex justify-center">
+            <div className="relative group w-full max-w-sm">
+              <div className="absolute -inset-0.5 bg-gradient-to-b from-[#ff2a2a]/30 to-transparent rounded-2xl blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="relative bg-black border border-neutral-800 rounded-2xl overflow-hidden p-2 shadow-2xl">
+                <img
+                  src={profileImg}
+                  alt={personalInfo.name}
+                  className="w-full h-auto object-cover rounded-xl aspect-[4/5] shadow-inner"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Bio & Technologies */}
+          <div className="lg:col-span-5 space-y-6">
             <h3 className="text-2xl font-semibold text-white">
               {aboutContent.heading}
             </h3>
@@ -22,7 +39,7 @@ function About() {
               className="text-neutral-300 leading-relaxed text-base sm:text-lg"
               dangerouslySetInnerHTML={{ __html: aboutContent.bio }}
             />
-            <div className="pt-4">
+            <div className="pt-2">
               <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-400 mb-3">
                 Core Technologies
               </h4>
@@ -39,7 +56,8 @@ function About() {
             </div>
           </div>
 
-          <div className="bg-black/60 border border-neutral-800 rounded-xl p-6 space-y-6">
+          {/* Quick Facts Card */}
+          <div className="lg:col-span-3 bg-black/60 border border-neutral-800 rounded-xl p-6 space-y-6">
             <h4 className="text-lg font-bold text-white border-b border-neutral-800 pb-3">
               Quick Facts
             </h4>
