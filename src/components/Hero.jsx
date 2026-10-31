@@ -55,15 +55,18 @@ function Hero() {
       id="home"
       className="relative w-full h-screen overflow-hidden bg-[#ff2a2a]"
     >
-      {/* Background profile photo */}
+      {/* Background profile photo — right-aligned on desktop, top on mobile */}
       <img
         src={heroPoster}
         alt="Profile"
         className="absolute inset-0 w-full h-full object-contain object-top md:object-right z-0"
       />
 
-      {/* Readability overlay */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/45 via-black/10 to-transparent" />
+      {/* Multi-layer readability overlays */}
+      {/* Strong left-to-right gradient so text on the left never competes with the photo on the right */}
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+      {/* Bottom gradient for mobile where text sits at the bottom over the photo */}
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-black/70 via-black/20 to-transparent md:from-black/40 md:via-transparent" />
 
       {/* Left floating social bar (desktop only) */}
       <aside className="hidden lg:flex flex-col gap-5 fixed left-6 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
@@ -72,8 +75,8 @@ function Hero() {
         {renderSocialIcon('instagram', socialLinks.instagram, 'Instagram')}
       </aside>
 
-      {/* Content container */}
-      <div className="absolute inset-0 z-20 max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-[8%] flex flex-col justify-end items-start">
+      {/* Content container — text pinned to bottom-left, away from the photo */}
+      <div className="absolute inset-0 z-20 max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-[8%] flex flex-col justify-end items-start">
         {/* Mobile inline social icons */}
         <div
           data-aos="fade-up"
@@ -85,20 +88,27 @@ function Hero() {
           {renderSocialIcon('instagram', socialLinks.instagram, 'Instagram')}
         </div>
 
-        {/* Heading */}
+        {/* Heading — white text with subtle shadow for contrast */}
         <h1
           data-aos="fade-up"
-          className="text-white text-3xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight"
+          className="text-white text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 tracking-tight max-w-xl md:max-w-2xl"
+          style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
         >
           {heroContent.greeting}, <br />
-          <span className="text-black">{heroContent.titleHighlight}</span>
+          <span
+            className="text-white"
+            style={{ textShadow: '0 2px 16px rgba(0,0,0,0.6)' }}
+          >
+            {heroContent.titleHighlight}
+          </span>
         </h1>
 
         {/* Subtitle */}
         <p
           data-aos="fade-up"
           data-aos-delay="200"
-          className="text-white text-sm md:text-lg font-semibold max-w-md mb-6 leading-relaxed"
+          className="text-white/90 text-sm md:text-lg font-semibold max-w-md mb-6 leading-relaxed"
+          style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
         >
           {heroContent.subtitle}
         </p>
