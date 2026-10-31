@@ -34,6 +34,7 @@ function Hero() {
           </a>
           <a
             href={heroContent.ctaResume.href}
+            download="Amulya resume01.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="px-7 py-3.5 bg-transparent hover:bg-neutral-900 text-neutral-300 border border-neutral-800 font-medium rounded-lg transition-all cursor-pointer"
