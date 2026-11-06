@@ -1,17 +1,36 @@
-import { useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import heroVideo from '../assets/hero/hero.mp4'
 import heroPoster from '../assets/about/profile.png'
-import { heroContent, personalInfo, socialLinks } from '../data/portfolioData'
+import { heroContent, socialLinks } from '../data/portfolioData'
 
 function Hero() {
+  const videoRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true, easing: 'ease-out' })
 
-    const handleLoad = () => AOS.refresh()
+    const handleLoad = () => {
+      AOS.refresh()
+    }
+
     window.addEventListener('load', handleLoad)
     return () => window.removeEventListener('load', handleLoad)
   }, [])
+
+  const toggleVideo = (e) => {
+    e.stopPropagation()
+    if (!videoRef.current) return
+    if (isPlaying) {
+      videoRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      videoRef.current.play()
+      setIsPlaying(true)
+    }
+  }
 
   const renderSocialIcon = (network, href, label) => {
     if (!href) return null
@@ -41,7 +60,7 @@ function Hero() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 hover:scale-110 transition-all shadow-sm"
+        className="w-5 h-5 text-white/60 hover:text-white hover:scale-125 transition-all inline-block"
       >
         <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
           {iconPath}
@@ -53,167 +72,144 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-screen flex items-center justify-center bg-[#ff2a2a] overflow-hidden pt-28 pb-16 lg:py-24"
+      className="relative w-full h-screen overflow-hidden bg-[#ff2a2a]"
     >
-      {/* Subtle background ambient gradients */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-black/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-black/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Background video fitting object-contain */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-contain object-top md:object-right z-0"
+        playsInline
+        poster={heroPoster}
+        onEnded={() => setIsPlaying(false)}
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </video>
 
-      {/* Left floating social bar (desktop only) */}
-      <aside className="hidden xl:flex flex-col gap-4 fixed left-6 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
-        {socialLinks.github && (
-          <a
-            href={socialLinks.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="w-6 h-6 text-white/70 hover:text-white hover:scale-125 transition-all inline-block"
-          >
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-              />
-            </svg>
-          </a>
-        )}
-        {socialLinks.linkedin && (
-          <a
-            href={socialLinks.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="w-6 h-6 text-white/70 hover:text-white hover:scale-125 transition-all inline-block"
-          >
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-            </svg>
-          </a>
-        )}
+      {/* Readability overlay */}
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/45 via-black/10 to-transparent" />
+
+      {/* Left floating social bar (hidden on small screens) */}
+      <aside className="hidden lg:flex flex-col gap-5 fixed left-6 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
+        {renderSocialIcon('github', socialLinks.github, 'GitHub')}
+        {renderSocialIcon('linkedin', socialLinks.linkedin, 'LinkedIn')}
+        {renderSocialIcon('instagram', socialLinks.instagram, 'Instagram')}
       </aside>
 
-      {/* Main Two-Column Container */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* LEFT COLUMN: All text content (50% width on desktop) */}
+      {/* Content container */}
+      <div className="absolute inset-0 z-20 max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-[8%] flex flex-col md:flex-row justify-end md:justify-between items-start md:items-end pointer-events-none">
+        {/* Left block */}
+        <div className="max-w-2xl pointer-events-auto">
+          {/* Small screens inline social links */}
           <div
-            data-aos="fade-right"
-            className="flex flex-col justify-center items-start text-left order-2 lg:order-1"
+            data-aos="fade-up"
+            data-aos-delay="100"
+            className="flex items-center gap-4 mb-3 lg:hidden"
           >
-            {/* Small badge */}
-            <span className="inline-block px-3.5 py-1 mb-4 text-xs font-semibold uppercase tracking-wider text-white bg-black/25 border border-white/20 rounded-full backdrop-blur-sm">
-              Portfolio
-            </span>
-
-            {/* Full Name clearly displayed */}
-            <h1
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight mb-2 drop-shadow-md"
-              style={{ textShadow: '0 2px 14px rgba(0,0,0,0.4)' }}
-            >
-              {personalInfo.name}
-            </h1>
-
-            {/* Role Title in bold white text below name */}
-            <h2
-              className="text-white text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight mb-5 drop-shadow-md"
-              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
-            >
-              {heroContent.titleHighlight}
-            </h2>
-
-            {/* Introduction paragraph */}
-            <p
-              className="text-white/95 text-base sm:text-lg leading-relaxed max-w-xl mb-8 font-medium drop-shadow-sm"
-              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.3)' }}
-            >
-              {heroContent.subtitle}
-            </p>
-
-            {/* Action buttons */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8">
-              {heroContent.ctaPrimary && (
-                <a
-                  href={heroContent.ctaPrimary.href}
-                  className="px-6 sm:px-7 py-3 rounded-full bg-white text-black font-bold text-sm sm:text-base hover:bg-neutral-100 hover:scale-105 transition-all shadow-xl cursor-pointer"
-                >
-                  {heroContent.ctaPrimary.text}
-                </a>
-              )}
-
-              {heroContent.ctaSecondary && (
-                <a
-                  href={heroContent.ctaSecondary.href}
-                  className="px-6 sm:px-7 py-3 rounded-full bg-black/40 border border-white/80 text-white font-bold text-sm sm:text-base backdrop-blur-md hover:bg-black/60 hover:scale-105 transition-all shadow-xl cursor-pointer"
-                >
-                  {heroContent.ctaSecondary.text}
-                </a>
-              )}
-
-              {heroContent.ctaResume && heroContent.ctaResume.href && (
-                <a
-                  href={heroContent.ctaResume.href}
-                  download="Amulya resume01.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 sm:px-7 py-3 rounded-full bg-white/10 border border-white/60 text-white font-bold text-sm sm:text-base backdrop-blur-md flex items-center gap-2 hover:bg-white/20 hover:scale-105 transition-all shadow-xl cursor-pointer"
-                >
-                  <svg
-                    className="w-4 h-4 fill-none stroke-current"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <span>{heroContent.ctaResume.text}</span>
-                </a>
-              )}
-            </div>
-
-            {/* Social icons visible on both desktop & mobile */}
-            <div className="flex items-center gap-3 pt-2">
-              <span className="text-white/80 text-xs font-semibold uppercase tracking-wider mr-1">
-                Connect:
-              </span>
-              {renderSocialIcon('github', socialLinks.github, 'GitHub')}
-              {renderSocialIcon('linkedin', socialLinks.linkedin, 'LinkedIn')}
-              {renderSocialIcon('instagram', socialLinks.instagram, 'Instagram')}
-            </div>
+            {renderSocialIcon('github', socialLinks.github, 'GitHub')}
+            {renderSocialIcon('linkedin', socialLinks.linkedin, 'LinkedIn')}
+            {renderSocialIcon('instagram', socialLinks.instagram, 'Instagram')}
           </div>
 
-          {/* RIGHT COLUMN: Profile photo (50% width on desktop) */}
-          <div
-            data-aos="fade-left"
+          {/* Heading */}
+          <h1
+            data-aos="fade-up"
+            className="text-white text-3xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight"
+          >
+            {heroContent.greeting}, <br />
+            <span className="text-black">{heroContent.titleHighlight}</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            data-aos="fade-up"
             data-aos-delay="200"
-            className="flex justify-center items-center order-1 lg:order-2 w-full"
+            className="text-white text-sm md:text-lg font-semibold max-w-md mb-6 leading-relaxed"
           >
-            <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg aspect-[4/5] flex items-center justify-center">
-              {/* Soft ambient shadow behind card */}
-              <div className="absolute inset-0 bg-black/25 rounded-3xl blur-2xl transform scale-95 pointer-events-none" />
+            {heroContent.subtitle}
+          </p>
 
-              {/* Professional photo card container */}
-              <div className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/25 shadow-2xl bg-black/10 backdrop-blur-sm p-3.5 flex items-center justify-center">
-                <img
-                  src={heroPoster}
-                  alt={personalInfo.name}
-                  className="w-full h-full object-contain rounded-2xl drop-shadow-xl"
-                  loading="eager"
-                />
-              </div>
-            </div>
+          {/* Pill buttons */}
+          <div
+            data-aos="fade-up"
+            data-aos-delay="400"
+            className="flex flex-wrap items-center gap-3 md:gap-4"
+          >
+            {heroContent.ctaPrimary && (
+              <a
+                href={heroContent.ctaPrimary.href}
+                className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-all shadow-md cursor-pointer"
+              >
+                {heroContent.ctaPrimary.text}
+              </a>
+            )}
+
+            {heroContent.ctaSecondary && (
+              <a
+                href={heroContent.ctaSecondary.href}
+                className="px-6 py-3 rounded-full bg-black/40 border border-white text-white font-semibold backdrop-blur hover:bg-black/60 transition-all shadow-md cursor-pointer"
+              >
+                {heroContent.ctaSecondary.text}
+              </a>
+            )}
+
+            {heroContent.ctaResume && heroContent.ctaResume.href && (
+              <a
+                href={heroContent.ctaResume.href}
+                download="Amulya resume01.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-full bg-transparent border border-white/50 text-white font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer shadow-md"
+              >
+                <svg
+                  className="w-4 h-4 fill-none stroke-current"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <span>{heroContent.ctaResume.text}</span>
+              </a>
+            )}
           </div>
+        </div>
+
+        {/* Right block: Play Reel control */}
+        <div
+          data-aos="zoom-in"
+          data-aos-delay="600"
+          className="pointer-events-auto flex flex-col items-center md:items-end mt-8 md:mt-0"
+        >
+          <button
+            type="button"
+            onClick={toggleVideo}
+            aria-label={isPlaying ? 'Pause video' : 'Play video reel'}
+            className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/30 bg-black/20 backdrop-blur hover:scale-110 hover:bg-[#ff2a2a] hover:shadow-[0_0_20px_#ff2a2a] transition-all flex items-center justify-center cursor-pointer text-white"
+          >
+            {isPlaying ? (
+              <svg className="w-5 h-5 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 md:w-8 md:h-8 fill-current ml-1" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+          <span className="mt-2 text-[10px] md:text-xs font-bold text-white uppercase tracking-widest">
+            {isPlaying ? 'Pause' : 'Play Reel'}
+          </span>
         </div>
       </div>
 
-      {/* Bottom-centre bouncing down-arrow */}
-      <div className="hidden md:block absolute bottom-4 left-1/2 -translate-x-1/2 z-20 animate-bounce pointer-events-none">
+      {/* Bottom-centre bouncing down-arrow indicator */}
+      <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-bounce pointer-events-none">
         <a
           href="#about"
-          className="text-white pointer-events-auto block opacity-80 hover:opacity-100 transition-opacity"
+          className="text-white pointer-events-auto block"
           aria-label="Scroll to About section"
         >
           <svg
