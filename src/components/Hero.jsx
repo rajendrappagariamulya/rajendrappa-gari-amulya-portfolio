@@ -96,7 +96,7 @@ function Hero() {
             className="text-white text-3xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight"
           >
             {heroContent.greeting}, <br />
-            <span className="text-black">{heroContent.titleHighlight}</span>
+            <span className="text-[#FFFFFF] drop-shadow-md">{heroContent.titleHighlight}</span>
           </h1>
 
           {/* Subtitle */}
