@@ -1,14 +1,10 @@
-import { useRef, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import heroVideo from '../assets/hero/hero.mp4'
 import heroPoster from '../assets/about/profile.png'
 import { heroContent, socialLinks } from '../data/portfolioData'
 
 function Hero() {
-  const videoRef = useRef(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-
   useEffect(() => {
     AOS.init({ duration: 1000, once: true, easing: 'ease-out' })
 
@@ -19,18 +15,6 @@ function Hero() {
     window.addEventListener('load', handleLoad)
     return () => window.removeEventListener('load', handleLoad)
   }, [])
-
-  const toggleVideo = (e) => {
-    e.stopPropagation()
-    if (!videoRef.current) return
-    if (isPlaying) {
-      videoRef.current.pause()
-      setIsPlaying(false)
-    } else {
-      videoRef.current.play()
-      setIsPlaying(true)
-    }
-  }
 
   const renderSocialIcon = (network, href, label) => {
     if (!href) return null
@@ -74,16 +58,13 @@ function Hero() {
       id="home"
       className="relative w-full h-screen overflow-hidden bg-[#ff2a2a]"
     >
-      {/* Background video fitting object-contain */}
-      <video
-        ref={videoRef}
+      {/* Profile Photo as background fitting object-contain */}
+      <img
+        src={heroPoster}
+        alt={heroContent.titleHighlight || 'Profile photo'}
         className="absolute inset-0 w-full h-full object-contain object-top md:object-right z-0"
-        playsInline
-        poster={heroPoster}
-        onEnded={() => setIsPlaying(false)}
-      >
-        <source src={heroVideo} type="video/mp4" />
-      </video>
+        loading="eager"
+      />
 
       {/* Readability overlay */}
       <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/45 via-black/10 to-transparent" />
@@ -116,7 +97,7 @@ function Hero() {
             className="text-white text-3xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight"
           >
             {heroContent.greeting}, <br />
-            <span className="text-black">{heroContent.titleHighlight}</span>
+            <span className="text-white font-extrabold">{heroContent.titleHighlight}</span>
           </h1>
 
           {/* Subtitle */}
@@ -175,33 +156,6 @@ function Hero() {
               </a>
             )}
           </div>
-        </div>
-
-        {/* Right block: Play Reel control */}
-        <div
-          data-aos="zoom-in"
-          data-aos-delay="600"
-          className="pointer-events-auto flex flex-col items-center md:items-end mt-8 md:mt-0"
-        >
-          <button
-            type="button"
-            onClick={toggleVideo}
-            aria-label={isPlaying ? 'Pause video' : 'Play video reel'}
-            className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/30 bg-black/20 backdrop-blur hover:scale-110 hover:bg-[#ff2a2a] hover:shadow-[0_0_20px_#ff2a2a] transition-all flex items-center justify-center cursor-pointer text-white"
-          >
-            {isPlaying ? (
-              <svg className="w-5 h-5 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5 md:w-8 md:h-8 fill-current ml-1" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </button>
-          <span className="mt-2 text-[10px] md:text-xs font-bold text-white uppercase tracking-widest">
-            {isPlaying ? 'Pause' : 'Play Reel'}
-          </span>
         </div>
       </div>
 
