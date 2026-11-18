@@ -98,7 +98,7 @@ function About() {
                       <div className="w-44 h-52 sm:w-48 sm:h-56 rounded-2xl overflow-hidden border-4 border-black bg-black shadow-2xl">
                         <img
                           src={profileImg}
-                          alt={personalInfo.name}
+                          alt="RAJENDRAPPA GARI AMULYA — Java Full Stack Developer, TAP Academy student"
                           className="w-full h-full object-cover object-top"
                           loading="eager"
                         />
