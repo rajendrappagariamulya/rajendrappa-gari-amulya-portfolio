@@ -119,7 +119,7 @@ function Contact() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-xs font-medium text-neutral-400 mb-1.5">
-                    Your Name
+                    Full Name
                   </label>
                   <input
                     id="name"

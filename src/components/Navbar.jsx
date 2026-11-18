@@ -28,7 +28,11 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Left: Brand logo */}
-        <a href="#" className="text-white text-2xl font-black tracking-tight">
+        <a
+          href="#home"
+          aria-label={`${personalInfo.brandName} Home`}
+          className="text-white text-2xl font-black tracking-tight"
+        >
           {personalInfo.brandName}
           <span className="text-[#ff2a2a]">.</span>
         </a>

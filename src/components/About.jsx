@@ -244,6 +244,7 @@ function About() {
                   <div className="space-y-2 text-xs">
                     <a
                       href={`mailto:${personalInfo.emails.primary}`}
+                      aria-label={`Send email to ${personalInfo.emails.primary}`}
                       onClick={(e) => e.stopPropagation()}
                       className="flex items-center gap-3 p-2 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-[#ff2a2a] text-neutral-200 hover:text-white transition-all group/item"
                     >
@@ -256,6 +257,7 @@ function About() {
                     {personalInfo.phone && (
                       <a
                         href={`tel:${personalInfo.phone}`}
+                        aria-label={`Call ${personalInfo.phone}`}
                         onClick={(e) => e.stopPropagation()}
                         className="flex items-center gap-3 p-2 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-[#ff2a2a] text-neutral-200 hover:text-white transition-all group/item"
                       >
@@ -275,6 +277,7 @@ function About() {
                           href={socialLinks.github}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label="GitHub Profile"
                           onClick={(e) => e.stopPropagation()}
                           className="flex-1 py-2 text-center text-xs font-bold bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-[#ff2a2a] text-white rounded-xl transition-all"
                         >
@@ -286,6 +289,7 @@ function About() {
                           href={socialLinks.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label="LinkedIn Profile"
                           onClick={(e) => e.stopPropagation()}
                           className="flex-1 py-2 text-center text-xs font-bold bg-[#ff2a2a] hover:bg-[#e02424] text-white rounded-xl shadow-lg transition-all"
                         >
